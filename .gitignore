@@ -1,0 +1,26 @@
+# 仮想環境
+venv/
+.venv/
+env/
+
+# 環境変数ファイル
+.env
+
+# IDE・エディタ設定
+.vscode/
+.idea/
+
+# Pythonキャッシュ
+__pycache__/
+*.pyc
+
+# ログフォルダ
+logs/
+*.log
+
+# OS固有のファイル
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook
+.ipynb_checkpoints/
