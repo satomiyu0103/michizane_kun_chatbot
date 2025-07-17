@@ -14,7 +14,9 @@ env/
 __pycache__/
 *.pyc
 
-# ログフォルダ
+# 情報フォルダ
+config/
+data/
 logs/
 *.log
 
