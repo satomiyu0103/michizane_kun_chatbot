@@ -15,6 +15,7 @@ __pycache__/
 *.pyc
 
 # 情報フォルダ
+draft/
 config/
 data/
 logs/
