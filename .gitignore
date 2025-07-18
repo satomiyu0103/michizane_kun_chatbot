@@ -20,8 +20,9 @@ data/
 logs/
 *.log
 
-# 秘密鍵
-.pem
+# SSL証明書/秘密鍵
+cert.pem
+key.pem
 
 # OS固有のファイル
 .DS_Store
