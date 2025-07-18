@@ -1,14 +1,17 @@
-from flask import Flask
+from flask import Flask, request, abort
 
 # Flaskアプリのインスタンスを作成
 app = Flask(__name__)
 
 
 # '/' という一番シンプルなURLにアクセスがあった時の処理
-@app.route("/")
-def hello():
-    # 「Hello, Michizane-kun!」という文字を返す
-    return "Hello, Michizane-kun!"
+# methods=["POST"]を追加して、POSTリクエストを受けるけるようにする
+@app.route("/callback", methods=["POST"])
+def callback():
+    # ここから先は今後LINEからの情報を受け取って処理するコードを書く
+
+    # まずはLINEに「正常に受け取った」証明として必ず200　OKを返す
+    return "OK", 200
 
 
 # このファイルが直接実行された場合にのみ、Webサーバーを起動する
