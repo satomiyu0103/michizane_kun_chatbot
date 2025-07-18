@@ -5,7 +5,7 @@ from linebot.v3.messaging import (
     Configuration,
     ApiClient,
     MessagingApi,
-    ReplyMessageReguest,
+    ReplyMessageRequest,
     TextMessage,
 )
 from linebot.v3.webhooks import MessageEvent, TextMessageContent
@@ -50,7 +50,7 @@ def handle_message(event):
         line_bot_api = MessagingApi(api_client)
         # 受け取ったメッセージをそのまま返信する
         line_bot_api.reply_message_with_http_info(
-            ReplyMessageReguest(
+            ReplyMessageRequest(
                 reply_token=event.reply_token,
                 messages=[TextMessage(text=event.message.text)],
             )
