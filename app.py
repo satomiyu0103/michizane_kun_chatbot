@@ -15,11 +15,11 @@ import os
 app = Flask(__name__)
 
 # 環境変数からアクセストークンとチャネルシークレットを取得
-LINE_CANNEL_ACCESS_TOKEN = os.environ.get("LINE_CANNEL_ACCESS_TOKEN")
-LINE_CANNEL_SECRET = os.environ.get("LINE_CANNEL_SECRET")
+LINE_CHANNEL_ACCESS_TOKEN = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN")
+LINE_CHANNEL_SECRET = os.environ.get("LINE_CHANNEL_SECRET")
 
-configuration = Configuration(access_token=LINE_CANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(LINE_CANNEL_SECRET)
+configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
+handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 
 # '/' という一番シンプルなURLにアクセスがあった時の処理
