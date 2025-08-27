@@ -14,7 +14,8 @@ def run(user_text, rules_summary):
     global _model
     if _model is None:
         _model = _get_model(GENAI_API_KEY, MODEL_NAME)
-    ask_gemini(_model, user_text, rules_summary)
+    text = ask_gemini(_model, user_text, rules_summary)
+    print(text)
 
 
 if __name__ == "__main__":
