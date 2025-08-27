@@ -6,6 +6,8 @@ user_text = """
     """
 rules_summary = ""
 
+_model = None
+
 
 def run(user_text, rules_summary):
     GENAI_API_KEY, MODEL_NAME = get_keys()
