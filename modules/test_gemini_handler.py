@@ -16,9 +16,9 @@ def _get_model():
         MODEL_NAME,
         generation_config={
             "temperature": 0.7,  # 出力の多様性0.0 ~ 1.0(デフォルト0.7)
-            "top_p": 0.9,  # nucleus sampling の確率しきい値0.1 ~ 1.0(デフォルト0.8~0.9 低いほど堅実　高いとランダム性が高い)
+            "top_p": 0.8,  # nucleus sampling の確率しきい値0.1 ~ 1.0(デフォルト0.8~0.9 低いほど堅実　高いとランダム性が高い)
             "top_k": 40,  # 上位k候補から選択1 ~ 100(デフォルト40 低いほど決まりきった文章)
-            "max_output_tokens": 256,  # 出力の文字数制限1 ~ 8192(256で200～400文字)
+            "max_output_tokens": 64,  # 出力の文字数制限1 ~ 8192(256で200～400文字)
         },
         system_instruction=(
             """
@@ -37,12 +37,15 @@ def _get_model():
     )
 
 
-_model = None
-
-
 def ask_gemini(model, user_text: str, rules_summary: str = ""):
+    # promptを簡潔に結合
+    prompt = user_text.strip()
+    if rules_summary:
+        prompt = f"{rules_summary.strip()}\n\n{prompt}"
+
+    text = ""
     try:
-        response = model.generate_content(user_text)
+        response = model.generate_content(prompt)
         text = (response.text or "").strip()
         print(text if text else "(生成に失敗しました)")
         return text if text else "生成に失敗しました"
