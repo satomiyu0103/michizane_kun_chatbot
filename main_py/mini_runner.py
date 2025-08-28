@@ -14,4 +14,4 @@ def main(user_text, rules_summary):
 
 
 if __name__ == "__main__":
-    run(user_text, rules_summary)
+    main(user_text, rules_summary)

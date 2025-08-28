@@ -4,15 +4,11 @@ import os
 from typing import Optional, Dict, Any, List
 
 
-def get_keys():
-    load_dotenv(r"C:\Users\NDF06\Documents\RPA_scripts\gemini_ai_test\config\.env")
-    GENAI_API_KEY = os.getenv("GENAI_API_KEY")
-    gemini_1_5_flash = "gemini-1.5-flash-latest"
-    MODEL_NAME = gemini_1_5_flash
-    return GENAI_API_KEY, MODEL_NAME
+def _get_model():
+    load_dotenv(r"C:\Users\NDF06\Documents\RPA_scripts\michizane_kun_chatbot\.env")
+    GENAI_API_KEY = os.getenv("GENAI_API_KEY")  # os.environ.get
+    MODEL_NAME = os.getenv("MODEL_NAME")  # os.environ.get
 
-
-def _get_model(GENAI_API_KEY, MODEL_NAME):
     if not GENAI_API_KEY:
         raise RuntimeError("APIキーが環境変数にありません")
     genai.configure(api_key=GENAI_API_KEY)
