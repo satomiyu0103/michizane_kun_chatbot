@@ -2,8 +2,8 @@ import pandas as pd
 
 
 def csv_url(sheet_name):
-    load_dotenv()
-    SPREADSHEET_ID = os.getenv("SPREADSHEET_ID")
+    # load_dotenv()
+    SPREADSHEET_ID = os.environ.get("SPREADSHEET_ID")
     GID = {
         "faq": 1932958690,
         "spots": 0,
