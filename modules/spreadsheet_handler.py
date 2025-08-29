@@ -32,4 +32,5 @@ def get_rule_text():
     text_spots = df_spots.to_string(index=False)
     text_tags = df_tags.to_string(index=False)
     text_categories = df_categories.to_string(index=False)
-    return text_faq, text_spots, text_tags, text_categories
+    text = text_faq + "\n" + text_spots + "\n" + text_tags + "\n" + text_categories
+    return text
