@@ -12,7 +12,7 @@ from linebot.v3.webhooks import MessageEvent, TextMessageContent
 import os
 
 # modulesのインポート（Gemini返答機能、DB読み込み機能）
-from modules.test_gemini_handler import ask_gemini
+from modules.gemini_handler import ask_gemini
 from modules.spreadsheet_handler import get_rule_text
 
 
