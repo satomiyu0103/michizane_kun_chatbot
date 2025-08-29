@@ -10,6 +10,8 @@ from linebot.v3.messaging import (
 )
 from linebot.v3.webhooks import MessageEvent, TextMessageContent
 import os
+
+# modulesのインポート（Gemini返答機能、DB読み込み機能）
 from modules.test_gemini_handler import ask_gemini
 from modules.spreadsheet_handler import get_rule_text
 
@@ -25,6 +27,11 @@ configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 
+@app.get("/")  # ヘルスチェック用
+def health():
+    return "OK", 200
+
+
 # '/' という一番シンプルなURLにアクセスがあった時の処理
 # methods=["POST"]を追加して、POSTリクエストを受けるけるようにする
 @app.route("/callback", methods=["POST"])
@@ -32,8 +39,7 @@ def callback():
     # ここから先は今後LINEからの情報を受け取って処理するコードを書く
 
     # リクエストヘッダから署名検証のための値を取得
-    signature = request.headers["X-Line-Signature"]
-
+    signature = request.headers.get("X-Line-Signature", "")
     # リクエストボディを取得
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
@@ -60,25 +66,30 @@ def handle_message(event):
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=answer)],
+                    messages=[TextMessage(text=answer[:4900] or "(空応答)")],
                 )
             )
+
     except Exception as e:
-        with ApiClient(configuration) as api_client:
-            MessagingApi(api_client).reply_message_with_http_info(
-                ReplyMessageRequest(
-                    replyToken=event.reply_token,
-                    messages=[
-                        TextMessage(
-                            text=f"すまんのう、内部エラーですじゃ：{type(e).__name__}"
-                        )
-                    ],
+        try:
+            with ApiClient(configuration) as api_client:
+                MessagingApi(api_client).reply_message_with_http_info(
+                    ReplyMessageRequest(
+                        reply_token=event.reply_token,
+                        messages=[
+                            TextMessage(
+                                text=f"すまんのう、内部エラーですじゃ：{type(e).__name__}"
+                            )
+                        ],
+                    )
                 )
-            )
+        finally:
+            app.logger.exception("handle_message failed")  # Renderログに詳細
 
 
 # このファイルが直接実行された場合にのみ、Webサーバーを起動する
 if __name__ == "__main__":
     # デバッグモードを有効にしてサーバーを起動
     # ※デバッグモード：コードを変更すると自動で再起動してくれたり、エラー表示が親切になったりする開発用の便利モード
-    app.run(debug=True, ssl_context=("cert.pem", "key.pem"))
+    port = int(os.environ.get("PORT", "5000"))
+    app.run(host="0.0.0.0", port=port, debug=True)
