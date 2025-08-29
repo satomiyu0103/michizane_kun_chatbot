@@ -10,6 +10,9 @@ from linebot.v3.messaging import (
 )
 from linebot.v3.webhooks import MessageEvent, TextMessageContent
 import os
+from modules.test_gemini_handler import ask_gemini
+from modules.spreadsheet_handler import get_rule_text
+
 
 # Flaskアプリのインスタンスを作成
 app = Flask(__name__)
@@ -46,13 +49,17 @@ def callback():
 # textメッセージを受け取った時の処理
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
+    user_text = event.message.text()
+    rules_summary = get_rule_text()
+    answer = ask_gemini(user_text, rules_summary)
+
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
         # 受け取ったメッセージをそのまま返信する
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
                 reply_token=event.reply_token,
-                messages=[TextMessage(text=event.message.text)],
+                messages=[TextMessage(text=answer)],
             )
         )
 

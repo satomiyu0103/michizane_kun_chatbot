@@ -8,10 +8,8 @@ DEFAULT_USER_TEXT = """
 
 
 def main(user_text: str = DEFAULT_USER_TEXT):
-    model = _get_model()
     rules = get_rule_text()
-    reply = ask_gemini(model, user_text, rules_summary=rules)
-    print(reply)
+    reply = ask_gemini(user_text, rules_summary=rules)
 
 
 if __name__ == "__main__":

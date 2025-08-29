@@ -37,7 +37,8 @@ def _get_model():
     )
 
 
-def ask_gemini(model, user_text: str, rules_summary: str = ""):
+def ask_gemini(user_text: str, rules_summary: str = ""):
+    model = _get_model()
     # promptを簡潔に結合
     prompt = user_text.strip()
     if rules_summary:
