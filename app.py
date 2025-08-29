@@ -49,19 +49,32 @@ def callback():
 # textメッセージを受け取った時の処理
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
-    user_text = event.message.text()
-    rules_summary = get_rule_text()
-    answer = ask_gemini(user_text, rules_summary)
+    try:
+        user_text = event.message.text
+        rules_summary = get_rule_text()
+        answer = ask_gemini(user_text, rules_summary)
 
-    with ApiClient(configuration) as api_client:
-        line_bot_api = MessagingApi(api_client)
-        # 受け取ったメッセージをそのまま返信する
-        line_bot_api.reply_message_with_http_info(
-            ReplyMessageRequest(
-                reply_token=event.reply_token,
-                messages=[TextMessage(text=answer)],
+        with ApiClient(configuration) as api_client:
+            line_bot_api = MessagingApi(api_client)
+            # 受け取ったメッセージをそのまま返信する
+            line_bot_api.reply_message_with_http_info(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text=answer)],
+                )
             )
-        )
+    except Exception as e:
+        with ApiClient(configuration) as api_client:
+            MessagingApi(api_client).reply_message_with_http_info(
+                ReplyMessageRequest(
+                    replyToken=event.reply_token,
+                    messages=[
+                        TextMessage(
+                            text=f"すまんのう、内部エラーですじゃ：{type(e).__name__}"
+                        )
+                    ],
+                )
+            )
 
 
 # このファイルが直接実行された場合にのみ、Webサーバーを起動する
