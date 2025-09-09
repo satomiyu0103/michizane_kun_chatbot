@@ -62,7 +62,7 @@ def handle_message(event):
 
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
-            # 受け取ったメッセージをそのまま返信する
+            # 受け取ったメッセージに返信する
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
