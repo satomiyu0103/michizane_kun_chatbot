@@ -1,8 +1,20 @@
+"""---------
+■ DBスプシを読み込みルールテキストを作成するモジュール
+---------"""
+
 import pandas as pd
 import os
 
 
-def csv_url(sheet_name):
+def csv_url(sheet_name: str) -> str:
+    """スプレッドシートを読み込むためのURLを作成する
+
+    Args:
+        sheet_name (str): Databaseのあるスプシのシート名
+
+    Returns:
+        str: 読み込み用URL
+    """
     # load_dotenv()
     SPREADSHEET_ID = os.environ.get("SPREADSHEET_ID")
     GID = {
@@ -15,10 +27,17 @@ def csv_url(sheet_name):
 
 
 def load_spresheet():
+    """DB保存スプレッドシートをDataFrameとして読み込む
+
+    Returns:
+        pandas.core.frame.DataFrame: それぞれのDBシートをDataFrameとして読み込む
+    """
+    # 読み込み用URLを作成する
     url_faq = csv_url("faq")
     url_spots = csv_url("spots")
     url_tags = csv_url("tags")
     url_categories = csv_url("categories")
+    # スプシをcsvで読み込みDataFrameへ変換する
     df_faq = pd.read_csv(url_faq)
     df_spots = pd.read_csv(url_spots)
     df_tags = pd.read_csv(url_tags)
@@ -27,6 +46,12 @@ def load_spresheet():
 
 
 def get_rule_text():
+    """DataFrameとして読み込んだDBをstr型に変換し、
+    textとして全文結合する
+
+    Returns:
+        str: Geminiに渡すルールテキスト
+    """
     df_faq, df_spots, df_tags, df_categories = load_spresheet()
     text_faq = df_faq.to_string(index=False)
     text_spots = df_spots.to_string(index=False)
