@@ -9,7 +9,14 @@ from typing import Optional, Dict, Any, List
 
 
 def _get_model():
-    """Geminiのモデルを定義する"""
+    """Geminiのモデルを作成する
+
+    Raises:
+        RuntimeError: APIキーがないときに発生
+
+    Returns:
+        _type_ : ask_Geminiで使用するモデル設定
+    """
     load_dotenv(r"C:\Users\NDF06\Documents\RPA_scripts\michizane_kun_chatbot\.env")
     GENAI_API_KEY = os.getenv("GENAI_API_KEY")  # os.environ.get
     MODEL_NAME = os.getenv("MODEL_NAME")  # os.environ.get
@@ -50,7 +57,15 @@ def _get_model():
 
 
 def ask_gemini(user_text: str, rules_summary: str = "") -> str:
-    """Geminiで回答を生成する"""
+    """Geminiで回答生成する関数
+
+    Args:
+        user_text (str): LINEから送られてきたユーザーの質問
+        rules_summary (str, optional): あらかじめ回答用に作成した観光情報スポットDB. Defaults to "".
+
+    Returns:
+        str: Geminiで生成したユーザーへの回答
+    """
     model = _get_model()
     # promptを簡潔に結合
     prompt = user_text.strip()
