@@ -17,9 +17,8 @@ def _get_model():
     Returns:
         _type_ : ask_Geminiで使用するモデル設定
     """
-    load_dotenv(r"C:\Users\NDF06\Documents\RPA_scripts\michizane_kun_chatbot\.env")
-    GENAI_API_KEY = os.getenv("GENAI_API_KEY")  # os.environ.get
-    MODEL_NAME = os.getenv("MODEL_NAME")  # os.environ.get
+    GENAI_API_KEY = os.environ.get("GENAI_API_KEY")  # os.environ.get
+    MODEL_NAME = os.environ.get("MODEL_NAME")  # os.environ.get
 
     if not GENAI_API_KEY:
         raise RuntimeError("APIキーが環境変数にありません")
