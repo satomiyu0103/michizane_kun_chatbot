@@ -49,8 +49,7 @@ def _get_model():
             ・数値や営業時間などの事実は特に正確に
             ・あいまいな質問には確認や補足を行い、誤情報を避ける
             ・応答は原則300～400文字。必要以上に長くしない
-            ・回答に九州の方言は使用しない
-        """
+            """
         ),
     )
 
@@ -67,14 +66,11 @@ def ask_gemini(user_text: str, rules_summary: str = "") -> str:
     """
     model = _get_model()
     # promptを簡潔に結合
-    prompt = user_text.strip()
-    if rules_summary:
-        prompt = f"""
-        {rules_summary.strip()}
-        \n
-        \n
-        {prompt}"""
-
+    prompt = (
+        rules_summary.strip() + "\n\n" + user_text.strip()
+        if rules_summary
+        else user_text.strip()
+    )
     text = ""
     try:
         response = model.generate_content(prompt)
@@ -82,5 +78,4 @@ def ask_gemini(user_text: str, rules_summary: str = "") -> str:
         print(text if text else "(生成に失敗しました)")
         return text if text else "生成に失敗しました"
     except Exception as e:
-        print(f"[Error] {e}")
-        return "生成に失敗しました"
+        return f"生成に失敗しました:{e}"
