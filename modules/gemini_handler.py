@@ -1,38 +1,15 @@
 """----------
-■ Geminiの回答生成に関するモジュール
+■ Geminiの回答生成に関するモジュール(google-genai対応版)
 ----------"""
 
-import google.generativeai as genai
-from dotenv import load_dotenv
+import google as genai
+from google.genai import types
+
 import os
-from typing import Optional, Dict, Any, List
+from typing import Optional
 
 
-def _get_model():
-    """Geminiのモデルを作成する
-
-    Raises:
-        RuntimeError: APIキーがないときに発生
-
-    Returns:
-        _type_ : ask_Geminiで使用するモデル設定
-    """
-    GENAI_API_KEY = os.environ.get("GENAI_API_KEY")  # os.environ.get
-    MODEL_NAME = os.environ.get("MODEL_NAME")  # os.environ.get
-
-    if not GENAI_API_KEY:
-        raise RuntimeError("APIキーが環境変数にありません")
-    genai.configure(api_key=GENAI_API_KEY)
-    return genai.GenerativeModel(
-        MODEL_NAME,
-        generation_config={
-            "temperature": 0.7,  # 出力の多様性0.0 ~ 1.0(デフォルト0.7)
-            "top_p": 0.8,  # nucleus sampling の確率しきい値0.1 ~ 1.0(デフォルト0.8~0.9 低いほど堅実　高いとランダム性が高い)
-            "top_k": 40,  # 上位k候補から選択1 ~ 100(デフォルト40 低いほど決まりきった文章)
-            "max_output_tokens": 512,  # 出力の文字数制限1 ~ 8192(256で200～400文字)
-        },
-        system_instruction=(
-            """
+SYSTEM_INSTRUCTION = """
             あなたは福岡市の観光・グルメスポットを案内する案内人です。
             下記の要領で利用者に適切な情報を提供してください。
             #キャラクター
@@ -49,33 +26,50 @@ def _get_model():
             ・数値や営業時間などの事実は特に正確に
             ・あいまいな質問には確認や補足を行い、誤情報を避ける
             ・応答は原則300～400文字。必要以上に長くしない
-            """
-        ),
-    )
+            """.strip()
+
+
+def get_client():
+    """Gemini APIのクライアントを返す"""
+
+    GENAI_API_KEY = os.environ.get("GENAI_API_KEY")  # os.environ.get
+    MODEL_NAME = "gemini-2.0-flash-lite"
+
+    if not GENAI_API_KEY:
+        raise RuntimeError("APIキーが環境変数にありません")
+    # v1明示は任意。必要ならhttp_optionsで指定可能
+    # client = genai.Client(api_key=GeminiAPI_key, http_options=types.HttpOptions(api_version="v1"))
+    client = genai.Client(api_key=GENAI_API_KEY)
+    return client
 
 
 def ask_gemini(user_text: str, rules_summary: str = "") -> str:
-    """Geminiで回答生成する関数
+    """Geminiで回答生成する関数"""
+    Client = get_client()
 
-    Args:
-        user_text (str): LINEから送られてきたユーザーの質問
-        rules_summary (str, optional): あらかじめ回答用に作成した観光情報スポットDB. Defaults to "".
-
-    Returns:
-        str: Geminiで生成したユーザーへの回答
-    """
-    model = _get_model()
-    # promptを簡潔に結合
-    prompt = (
-        rules_summary.strip() + "\n\n" + user_text.strip()
+    # 与える内容:ルール（任意）→　ユーザー質問
+    contents = (
+        [rules_summary.strip(), user_text.strip()]
         if rules_summary
         else user_text.strip()
     )
-    text = ""
+
+    # 生成設定とsystem指示をまとめて渡す
+    config = types.GenerateContentConfig(
+        temperature=0.7,  # 出力の多様性0.0 ~ 1.0(デフォルト0.7)
+        top_p=0.8,  # nucleus sampling の確率しきい値0.1 ~ 1.0(デフォルト0.8~0.9 低いほど堅実　高いとランダム性が高い)
+        top_k=40,  # 上位k候補から選択1 ~ 100(デフォルト40 低いほど決まりきった文章)
+        max_output_tokens=512,  # 出力の文字数制限1 ~ 8192(256で200～400文字)
+        system_instruction=SYSTEM_INSTRUCTION,
+    )
+
     try:
-        response = model.generate_content(prompt)
-        text = (response.text or "").strip()
-        print(text if text else "(生成に失敗しました)")
+        resp = Client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=contents,
+            config=config,
+        )
+        text = (resp.text or "").strip()
         return text if text else "生成に失敗しました"
     except Exception as e:
         return f"生成に失敗しました:{e}"
