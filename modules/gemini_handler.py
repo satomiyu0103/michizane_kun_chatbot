@@ -2,7 +2,7 @@
 ■ Geminiの回答生成に関するモジュール(google-genai対応版)
 ----------"""
 
-import google as genai
+from google import genai
 from google.genai import types
 
 import os
