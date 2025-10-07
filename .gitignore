@@ -13,6 +13,8 @@ env/
 # Pythonキャッシュ
 __pycache__/
 *.pyc
+mypy_cache
+mypy.ini
 
 # 情報フォルダ
 draft/
