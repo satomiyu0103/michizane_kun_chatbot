@@ -62,6 +62,7 @@ def handle_message(event):
         user_text = event.message.text
         rules_summary = get_rule_text()
         answer = ask_gemini(user_text, rules_summary)
+        safe_answer = answer or ""
 
         with ApiClient(configuration) as api_client:
             line_bot_api = MessagingApi(api_client)
@@ -69,7 +70,7 @@ def handle_message(event):
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=answer[:4900] or "(空応答)")],
+                    messages=[TextMessage(text=safe_answer[:4900] or "(空応答)")],
                 )
             )
 
@@ -81,7 +82,7 @@ def handle_message(event):
                         reply_token=event.reply_token,
                         messages=[
                             TextMessage(
-                                text=f"すまんのう、内部エラーですじゃ：{type(e).__name__}"
+                                text=f"すまんのう、内部エラーですじゃ：{type(e).__name__} / {str(e)[:200]}"
                             )
                         ],
                     )
