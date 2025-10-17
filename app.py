@@ -15,7 +15,7 @@ load_dotenv()
 import os
 
 # modulesのインポート（Gemini返答機能、DB読み込み機能）
-from modules.gemini_handler import ask_gemini
+from modules.gemini_handler import ask_gemini, sanitize_user_text
 from modules.spreadsheet_handler import get_rule_text
 
 
@@ -63,6 +63,7 @@ def callback():
 def handle_message(event):
     try:
         user_text = event.message.text
+        user_text = sanitize_user_text(user_text)
         rules_summary = get_rule_text()
         answer = ask_gemini(user_text, rules_summary)
         safe_answer = answer or ""
