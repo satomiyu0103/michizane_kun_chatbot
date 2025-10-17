@@ -9,6 +9,9 @@ from linebot.v3.messaging import (
     TextMessage,
 )
 from linebot.v3.webhooks import MessageEvent, TextMessageContent
+from dotenv import load_dotenv
+
+load_dotenv()
 import os
 
 # modulesのインポート（Gemini返答機能、DB読み込み機能）
