@@ -45,7 +45,6 @@ def get_client():
     """Gemini APIのクライアントを返す"""
 
     GENAI_API_KEY = os.environ.get("GENAI_API_KEY")  # os.environ.get
-    MODEL_NAME = "gemini-2.0-flash-lite"
 
     if not GENAI_API_KEY:
         raise RuntimeError("APIキーが環境変数にありません")

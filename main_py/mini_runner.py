@@ -9,6 +9,7 @@ DEFAULT_USER_TEXT = """
 def main(user_text: str = DEFAULT_USER_TEXT):
     rules = get_rule_text()
     reply = ask_gemini(user_text, rules_summary=rules)
+    print(reply)
 
 
 if __name__ == "__main__":
