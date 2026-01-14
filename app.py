@@ -11,14 +11,14 @@ from linebot.v3.messaging import (
 from linebot.v3.webhooks import MessageEvent, TextMessageContent
 from dotenv import load_dotenv
 
-load_dotenv()
+
 import os
 
 # modulesのインポート（Gemini返答機能、DB読み込み機能）
 from modules.gemini_handler import ask_gemini, sanitize_user_text
 from modules.spreadsheet_handler import get_rule_text
 
-
+load_dotenv()
 # Flaskアプリのインスタンスを作成
 app = Flask(__name__)
 

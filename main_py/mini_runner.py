@@ -1,5 +1,4 @@
-from dotenv import load_dotenv
-from modules.gemini_handler import _get_model, ask_gemini
+from modules.gemini_handler import ask_gemini
 from modules.spreadsheet_handler import get_rule_text
 
 DEFAULT_USER_TEXT = """

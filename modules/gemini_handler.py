@@ -6,9 +6,9 @@ from google import genai
 from google.genai import types
 
 import os
-from typing import Optional
 
-import re, unicodedata
+import re
+import unicodedata
 
 
 def sanitize_user_text(s: str) -> str:
