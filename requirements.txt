@@ -1,0 +1,13 @@
+cryptography==45.0.5
+Flask>=3
+gunicorn>=21
+google-genai
+python-dotenv>=1.0.0
+line-bot-sdk==3.*
+gspread
+google-auth
+pandas>=2.2.0
+pandas-gbq
+google-cloud-bigquery
+google-cloud-bigquery-storage
+mypy
