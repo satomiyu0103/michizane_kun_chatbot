@@ -97,7 +97,10 @@ def handle_message(event):
 
 # このファイルが直接実行された場合にのみ、Webサーバーを起動する
 if __name__ == "__main__":
+    # 環境変数FLASK_ENVがdevelopmentの場合のみTrueになる
+    is_local = (os.environ.get("FLASK_ENV") == "development")
+    
     # デバッグモードを有効にしてサーバーを起動
     # ※デバッグモード：コードを変更すると自動で再起動してくれたり、エラー表示が親切になったりする開発用の便利モード
     port = int(os.environ.get("PORT", "5000"))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=is_local)
