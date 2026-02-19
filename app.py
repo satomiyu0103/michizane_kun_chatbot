@@ -78,7 +78,7 @@ def handle_message(event):
                 )
             )
 
-    except Exception as e:
+    except Exception:
         try:
             with ApiClient(configuration) as api_client:
                 MessagingApi(api_client).reply_message_with_http_info(
