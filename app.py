@@ -86,7 +86,7 @@ def handle_message(event):
                         reply_token=event.reply_token,
                         messages=[
                             TextMessage(
-                                text=f"すまんのう、内部エラーですじゃ：{type(e).__name__} / {str(e)[:200]}"
+                                text="すまんのう、内部エラーが発生したみたいじゃ。時間をおいて再度試してほしいのう。"
                             )
                         ],
                     )
@@ -100,4 +100,4 @@ if __name__ == "__main__":
     # デバッグモードを有効にしてサーバーを起動
     # ※デバッグモード：コードを変更すると自動で再起動してくれたり、エラー表示が親切になったりする開発用の便利モード
     port = int(os.environ.get("PORT", "5000"))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port)
